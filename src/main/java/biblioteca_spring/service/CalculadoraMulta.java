@@ -1,0 +1,17 @@
+package biblioteca_spring.service;
+
+import biblioteca_spring.config.BibliotecaConfig;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CalculadoraMulta {
+    int prazo = BibliotecaConfig.PRAZO_DEVOLUCO_PADRAO_DIAS;
+    double multaDiaria = BibliotecaConfig.VALOR_MULTA_DIARIA;
+
+    public double valorCalculado(int diasCorridos){
+        if (diasCorridos < prazo){
+            return 0.0;
+        }
+        return (diasCorridos - prazo) * multaDiaria;
+    }
+}
