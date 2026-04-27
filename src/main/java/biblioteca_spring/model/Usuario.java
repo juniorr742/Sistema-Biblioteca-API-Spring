@@ -1,7 +1,7 @@
 package biblioteca_spring.model;
 
 import jakarta.persistence.*;
-
+import biblioteca_spring.model.Pagamento;
 
 import java.util.Collections;
 
