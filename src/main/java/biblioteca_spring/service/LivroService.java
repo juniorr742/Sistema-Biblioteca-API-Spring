@@ -18,6 +18,7 @@ public class LivroService {
         if (livroRepository.findByTitulo(livro.getTitulo()).isPresent()){
             throw new RuntimeException("[AVISO] - Livro com titulos idênticos.");
         }
+
         return livroRepository.save(livro);
     }
     public Livro buscarPorId(Long id){
@@ -41,5 +42,9 @@ public class LivroService {
             throw new RuntimeException("[AVISO] - Livro não encontrado");
         }
         livroRepository.deleteById(id);
+    }
+
+    public Livro buscarLivroPorTitulo(String titulo){
+        return livroRepository.findByTitulo(titulo).orElse(null);
     }
 }

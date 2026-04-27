@@ -22,6 +22,8 @@ public class UsuarioService {
         return usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("[AVISO] - Usuário não encontrado"));
     }
 
+
+
     public List<Usuario> listarTodos(){
         return usuarioRepository.findAll();
     }
@@ -38,5 +40,13 @@ public class UsuarioService {
             throw new RuntimeException("[AVISO] - Usuário não existente");
         }
         usuarioRepository.deleteById(id);
+    }
+
+    public Usuario verificarSaldo(long id) {
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        if (usuario != null) {
+            return usuario;
+        }
+        throw new RuntimeException("[AVISO] - Usuário não identificado");
     }
 }

@@ -3,10 +3,13 @@ package biblioteca_spring.service;
 import biblioteca_spring.model.Livro;
 import biblioteca_spring.model.Usuario;
 import biblioteca_spring.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ValidadorEmprestimo {
     UsuarioRepository usuarioRepository;
-
+    @Autowired
     public ValidadorEmprestimo(UsuarioRepository usuarioRepository){
         this.usuarioRepository = usuarioRepository;
     }

@@ -1,9 +1,23 @@
 package biblioteca_spring.service;
 
 import biblioteca_spring.model.Livro;
+import biblioteca_spring.model.RegistroEmprestimo;
 import biblioteca_spring.model.Usuario;
+import biblioteca_spring.repository.LivroRepository;
+import biblioteca_spring.repository.RegistrosRepository;
+import biblioteca_spring.service.PagamentoService;
+import biblioteca_spring.service.CalculadoraMulta;
+import biblioteca_spring.service.ValidadorEmprestimo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EmprestimoService {
@@ -11,33 +25,53 @@ public class EmprestimoService {
     private ValidadorEmprestimo validador;
     private CalculadoraMulta calculadora;
     private PagamentoService pagamento;
+    private RegistrosRepository registrosRepository;
+    private LivroRepository livroRepository;
 
     @Autowired
-    public EmprestimoService(ValidadorEmprestimo validador, CalculadoraMulta calculadora, PagamentoService pagamento) {
+    public EmprestimoService(ValidadorEmprestimo validador, CalculadoraMulta calculadora, PagamentoService pagamento, RegistrosRepository registrosRepository, LivroRepository livroRepository) {
         this.validador = validador;
         this.calculadora = calculadora;
         this.pagamento = pagamento;
+        this.registrosRepository = registrosRepository;
+        this.livroRepository = livroRepository;
     }
 
-    public boolean emprestarLivro(Usuario usuario, Livro livro) {
+    public RegistroEmprestimo emprestarLivro(Usuario usuario, Livro livro) {
         if (!validador.podeEmprestar(usuario, livro)) {
-            System.out.println("Empréstimo cancelado, erro de validação");
-            return false;
+            throw new RuntimeException("[AVISO] - Erro de validação");
         }
         pagamento.aplicarTaxaEmprestimo(usuario);
         livro.setDisponivel(false);
-        System.out.println("Livro " + livro.getTitulo() + " emprestado com sucesso!");
-        return true;
+        RegistroEmprestimo registro = new RegistroEmprestimo(usuario, livro);
+        return registrosRepository.save(registro);
     }
 
-    public void realizarDevolucao(Usuario usuario, Livro livro, int diasCorridos) {
+    public RegistroEmprestimo realizarDevolucao(RegistroEmprestimo registro) {
+
+        long diasCorridos = ChronoUnit.DAYS.between(registro.getDataEmprestimo(), LocalDate.now());
         double valorMulta = calculadora.valorCalculado(diasCorridos);
+
         if (valorMulta > 0) {
-            pagamento.aplicarMultaAtraso(usuario, valorMulta);
-            System.out.println("Livro devolvido com atraso!");
-        } else {
-            System.out.println("Livro devolvido no prazo!");
+            pagamento.aplicarMultaAtraso(registro.getUsuario(), valorMulta);
         }
-        livro.setDisponivel(true);
+
+        registro.getLivro().setDisponivel(true);
+        registro.finalizarEmprestimo();
+        return registrosRepository.save(registro);
+    }
+
+    public List<RegistroEmprestimo> listarHistorico(){
+        return registrosRepository.findAll();
+    }
+
+    public List<Livro> listarLivrosEmprestadosPorUsuario(long idUsuario) {
+            List<RegistroEmprestimo> ativos = registrosRepository.findByUsuarioAndFinalizadoFalse(idUsuario);
+            List<Livro> livros = new ArrayList<>();
+            for (RegistroEmprestimo r : ativos) {
+                Livro l = livroRepository.findById(r.getLivro().getId()).orElse(null);
+                if (l != null) livros.add(l);
+            }
+            return livros;
     }
 }

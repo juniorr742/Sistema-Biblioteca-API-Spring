@@ -8,7 +8,7 @@ public class CalculadoraMulta {
     int prazo = BibliotecaConfig.PRAZO_DEVOLUCO_PADRAO_DIAS;
     double multaDiaria = BibliotecaConfig.VALOR_MULTA_DIARIA;
 
-    public double valorCalculado(int diasCorridos){
+    public double valorCalculado(long diasCorridos){
         if (diasCorridos < prazo){
             return 0.0;
         }
