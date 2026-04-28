@@ -1,7 +1,9 @@
 package biblioteca_spring.controller;
 
+import biblioteca_spring.dto.LivroRequestDTO;
 import biblioteca_spring.model.Livro;
 import biblioteca_spring.service.LivroService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.List;
 public class LivroController {
     LivroService livroService;
 
+    @Autowired
     public LivroController(LivroService livroService){
         this.livroService = livroService;
     }
@@ -21,8 +24,8 @@ public class LivroController {
     }
 
     @PostMapping
-    public Livro salvar(@RequestBody Livro livro){
-        return livroService.salvar(livro);
+    public Livro salvar(@RequestBody LivroRequestDTO livroDTO){
+        return livroService.salvar(livroDTO);
     }
 
     @GetMapping("/{id}")
@@ -31,8 +34,8 @@ public class LivroController {
     }
 
     @PutMapping("/{id}")
-    public Livro atualizar(@PathVariable Long id ,@RequestBody Livro livro){
-        return livroService.atualizar(livro);
+    public Livro atualizar(@PathVariable Long id ,@RequestBody LivroRequestDTO livroDTO){
+        return livroService.atualizar(id ,livroDTO);
     }
 
     @DeleteMapping("/{id}")

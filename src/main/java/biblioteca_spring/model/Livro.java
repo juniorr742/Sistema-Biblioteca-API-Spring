@@ -29,14 +29,23 @@ public class Livro {
         return titulo; }
 
     public String getAutor() {
+
         return autor;
     }
     public void setDisponivel(boolean disponivel) {
-        this.disponivel = disponivel;}
+        this.disponivel = disponivel;
+    }
+
     public boolean isDisponivel() {
-        return disponivel;}
+        return disponivel;
+    }
+
     public Long getId(){
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package biblioteca_spring.service;
 
+import biblioteca_spring.dto.LivroRequestDTO;
 import biblioteca_spring.model.Livro;
 import biblioteca_spring.repository.LivroRepository;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,13 @@ public class LivroService {
         this.livroRepository = livroRepository;
     }
 
-    public Livro salvar(Livro livro){
-        if (livroRepository.findByTitulo(livro.getTitulo()).isPresent()){
+    public Livro salvar(LivroRequestDTO livroDTO){
+
+        if (livroRepository.findByTitulo(livroDTO.getTitulo()).isPresent()){
             throw new RuntimeException("[AVISO] - Livro com titulos idênticos.");
         }
 
+        Livro livro = new Livro(livroDTO.getTitulo(), livroDTO.getAutor());
         return livroRepository.save(livro);
     }
     public Livro buscarPorId(Long id){
@@ -29,11 +32,14 @@ public class LivroService {
         return livroRepository.findAll();
     }
 
-    public Livro atualizar(Livro livro){
-
-        if (!livroRepository.existsById(livro.getId())){
+    public Livro atualizar(Long id, LivroRequestDTO livroDTO){
+        if (!livroRepository.existsById(id)){
             throw new RuntimeException("Livro não existente");
          }
+
+        Livro livro = new Livro(livroDTO.getTitulo(), livroDTO.getAutor());
+        livro.setId(id);
+
         return livroRepository.save(livro);
     }
 

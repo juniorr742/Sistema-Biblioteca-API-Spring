@@ -1,7 +1,11 @@
 package biblioteca_spring.service;
 
+import biblioteca_spring.dto.UsuarioRequestDTO;
+import biblioteca_spring.model.Aluno;
+import biblioteca_spring.model.Professor;
 import biblioteca_spring.model.Usuario;
 import biblioteca_spring.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,36 +14,48 @@ import java.util.List;
 public class UsuarioService {
     UsuarioRepository usuarioRepository;
 
+    @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository){
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Usuario salvar(Usuario usuario){
-        return usuarioRepository.save(usuario);
+    public Usuario salvar(UsuarioRequestDTO usuarioDTO){
+
+        switch (usuarioDTO.getTipo().trim().toLowerCase()){
+            case "aluno": Usuario usuario = new Aluno(usuarioDTO.getNome());
+                return usuarioRepository.save(usuario);
+
+            case "professor": Usuario usuario1 = new Professor(usuarioDTO.getNome());
+                return usuarioRepository.save(usuario1);
+        }
+
+        throw new RuntimeException("[AVISO] - Erro de indentificação do usuário");
     }
 
     public Usuario buscarPorId(long id){
         return usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("[AVISO] - Usuário não encontrado"));
     }
 
-
-
     public List<Usuario> listarTodos(){
         return usuarioRepository.findAll();
     }
 
-    public Usuario atualizar(Usuario usuario){
-        if (!usuarioRepository.existsById(usuario.getId())){
-            throw new RuntimeException("[AVISO] - Usuário não existente");
-        }
+    public Usuario atualizar(Long id, UsuarioRequestDTO usuarioDTO){
+       Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("[AVISO] - Usuário não encontrado"));
+
+       usuario.setNome(usuarioDTO.getNome());
         return usuarioRepository.save(usuario);
     }
 
-    public void delete(long id){
+    public void deletar(long id){
         if (!usuarioRepository.existsById(id)){
             throw new RuntimeException("[AVISO] - Usuário não existente");
         }
         usuarioRepository.deleteById(id);
+    }
+
+    public List<Usuario> buscarUsuarioPorNome(String nome){
+        return usuarioRepository.findByNomeContainingIgnoreCase(nome);
     }
 
     public Usuario verificarSaldo(long id) {
@@ -49,4 +65,6 @@ public class UsuarioService {
         }
         throw new RuntimeException("[AVISO] - Usuário não identificado");
     }
+
+
 }

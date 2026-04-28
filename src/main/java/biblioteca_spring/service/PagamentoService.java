@@ -39,4 +39,12 @@ public class PagamentoService {
         usuarioRepository.save(usuario);
         return usuario;
     }
+
+    public Usuario verificarSaldo(long id) {
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        if (usuario != null) {
+            return usuario;
+        }
+        throw new RuntimeException("[AVISO] - Usuário não identificado");
+    }
 }

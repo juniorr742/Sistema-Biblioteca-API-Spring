@@ -19,21 +19,34 @@ public abstract class Usuario {
 
 
     protected Usuario(){}
+
     public Usuario (String nome){
         this.nome = nome;
         this.saldo = new Pagamento();
     }
 
-    public String getNome(){return nome;}
-    public Long getId(){return id;}
+    public String getNome(){
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Long getId(){
+        return id;
+    }
+
     public Pagamento getSaldo() {
         return saldo;
     }
 
     public abstract double getLimiteSaldo();
+
     public abstract int getLimiteLivros();
 
     public abstract String obterTipo();
+
 
     @Override
     public String toString() {

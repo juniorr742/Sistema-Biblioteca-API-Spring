@@ -5,15 +5,12 @@ import biblioteca_spring.model.RegistroEmprestimo;
 import biblioteca_spring.model.Usuario;
 import biblioteca_spring.repository.LivroRepository;
 import biblioteca_spring.repository.RegistrosRepository;
-import biblioteca_spring.service.PagamentoService;
-import biblioteca_spring.service.CalculadoraMulta;
-import biblioteca_spring.service.ValidadorEmprestimo;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
