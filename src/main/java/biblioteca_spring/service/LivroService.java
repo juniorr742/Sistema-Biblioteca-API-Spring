@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public class LivroService {
-    LivroRepository livroRepository;
+    private final LivroRepository livroRepository;
 
     public LivroService(LivroRepository livroRepository){
         this.livroRepository = livroRepository;
@@ -17,7 +17,7 @@ public class LivroService {
 
     public Livro salvar(LivroRequestDTO livroDTO){
 
-        if (livroRepository.findByTitulo(livroDTO.getTitulo()).isPresent()){
+        if (livroRepository.existsByTituloContainingIgnoreCase(livroDTO.getTitulo())){
             throw new RuntimeException("[AVISO] - Livro com titulos idênticos.");
         }
 
@@ -50,7 +50,7 @@ public class LivroService {
         livroRepository.deleteById(id);
     }
 
-    public Livro buscarLivroPorTitulo(String titulo){
-        return livroRepository.findByTitulo(titulo).orElse(null);
+    public List<Livro> buscarLivroPorTitulo(String titulo){
+        return livroRepository.findByTituloContainingIgnoreCase(titulo);
     }
 }

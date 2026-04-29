@@ -2,40 +2,35 @@ package biblioteca_spring.service;
 
 import biblioteca_spring.model.Livro;
 import biblioteca_spring.model.Usuario;
-import biblioteca_spring.repository.UsuarioRepository;
+import biblioteca_spring.repository.RegistrosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ValidadorEmprestimo {
-    UsuarioRepository usuarioRepository;
+    private final RegistrosRepository registrosRepository;
     @Autowired
-    public ValidadorEmprestimo(UsuarioRepository usuarioRepository){
-        this.usuarioRepository = usuarioRepository;
+    public ValidadorEmprestimo(RegistrosRepository registrosRepository){
+        this.registrosRepository = registrosRepository;
     }
 
     public boolean podeEmprestar(Usuario usuario, Livro livro){
-        boolean jaPossuiEsseExemplar = usuario.getlivroEmprestado().stream()
-                .anyMatch(l -> l.getId() == livro.getId());
+        boolean jaPossuiEsseExemplar = registrosRepository.existsByUsuarioAndLivroAndFinalizadoFalse(usuario, livro);
 
         if (jaPossuiEsseExemplar){
-            System.out.println("ERRO: O usuário já está em posse desse exemplar.");
-            return false;
+            throw new RuntimeException("[AVISO] - O Usuário ja está com esse livro. ");
         }
 
         if (!livro.isDisponivel()){
-            System.err.println("ERRO: O Livro não está disponivel.");
-            return false;
+            throw new RuntimeException("[AVISO] - O livro não esta disponível");
         }
 
         if (usuario.getSaldo().getSaldoDevedor() >= usuario.getLimiteSaldo()) {
-            System.out.println("ERRO: Limite de saldo atingido, por favor realize o pagamento.");
-            return false;
+            throw new RuntimeException("[AVISO] - Limite de saldo devedor atingido");
         }
 
-        if (usuario.getlivroEmprestado().size() >= usuario.getLimiteLivros()){
-            System.out.println("ERRO: Limite de livros atingido, por favor realize a devolução.");
-            return false;
+        if (registrosRepository.countByUsuarioAndFinalizadoFalse(usuario) >= usuario.getLimiteLivros()){
+            throw new RuntimeException("[AVISO] - Limite de livros em posse atingido");
         }
 
         return true;

@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/livros")
 public class LivroController {
-    LivroService livroService;
+   private final LivroService livroService;
 
     @Autowired
     public LivroController(LivroService livroService){
@@ -44,7 +44,7 @@ public class LivroController {
     }
 
     @GetMapping("/buscar")
-    public Livro buscarLivroPorTitulo(@RequestParam String titulo){
+    public List<Livro> buscarLivroPorTitulo(@RequestParam String titulo){
         return livroService.buscarLivroPorTitulo(titulo);
     }
 

@@ -8,30 +8,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("usuarios/{id}/pagamento")
+@RequestMapping("usuarios/pagamento")
 public class PagamentoController {
-    BibliotecaConfig bibliotecaConfig;
-    PagamentoService pagamentoService;
-    UsuarioService usuarioService;
+    private final PagamentoService pagamentoService;
+    private final UsuarioService usuarioService;
 
     @Autowired
-    public PagamentoController(BibliotecaConfig bibliotecaConfig, PagamentoService pagamentoService, UsuarioService usuarioService){
-        this.bibliotecaConfig = bibliotecaConfig;
+    public PagamentoController(PagamentoService pagamentoService, UsuarioService usuarioService){
         this.pagamentoService = pagamentoService;
         this.usuarioService = usuarioService;
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public Usuario verificarSaldo(@PathVariable Long id) {
         return pagamentoService.verificarSaldo(id);
     }
 
-    @GetMapping("/taxa")
-    public double verificarCustoFixo(@PathVariable Long id){
+    @GetMapping
+    public double verificarCustoFixo(){
         return BibliotecaConfig.CUSTO_FIXO_EMPRESTIMO;
     }
 
-    @PostMapping
+    @PostMapping("/{id}")
     public Usuario processarPagamento(@PathVariable Long id){
         Usuario usuario = usuarioService.buscarPorId(id);
         return pagamentoService.processarPagamentoTotal(usuario);

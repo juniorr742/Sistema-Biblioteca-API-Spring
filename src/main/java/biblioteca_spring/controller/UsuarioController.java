@@ -1,10 +1,7 @@
 package biblioteca_spring.controller;
 
 import biblioteca_spring.dto.UsuarioRequestDTO;
-import biblioteca_spring.model.Aluno;
-import biblioteca_spring.model.Professor;
 import biblioteca_spring.model.Usuario;
-import biblioteca_spring.repository.UsuarioRepository;
 import biblioteca_spring.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
-    UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
     @Autowired
     public UsuarioController(UsuarioService usuarioService){
@@ -36,7 +33,7 @@ public class UsuarioController {
         return usuarioService.buscarPorId(id);
     }
 
-    @GetMapping("{id}")
+    @PutMapping("{id}")
     public Usuario atualizar(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuarioDTO){
         return usuarioService.atualizar(id, usuarioDTO);
     }
@@ -46,7 +43,7 @@ public class UsuarioController {
         usuarioService.deletar(id);
     }
 
-    @GetMapping("{nome")
+    @GetMapping("bucarNome/{nome}")
     public List<Usuario> buscarUsuarioPorNome(@PathVariable String nome){
         return usuarioService.buscarUsuarioPorNome(nome);
     }
