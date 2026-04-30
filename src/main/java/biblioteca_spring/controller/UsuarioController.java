@@ -43,7 +43,7 @@ public class UsuarioController {
         usuarioService.deletar(id);
     }
 
-    @GetMapping("bucarNome/{nome}")
+    @GetMapping("buscarNome/{nome}")
     public List<Usuario> buscarUsuarioPorNome(@PathVariable String nome){
         return usuarioService.buscarUsuarioPorNome(nome);
     }

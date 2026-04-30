@@ -1,11 +1,8 @@
 package biblioteca_spring.controller;
 
 import biblioteca_spring.dto.EmprestimoRequestDTO;
-import biblioteca_spring.dto.LivroRequestDTO;
-import biblioteca_spring.dto.UsuarioRequestDTO;
 import biblioteca_spring.model.Livro;
 import biblioteca_spring.model.RegistroEmprestimo;
-import biblioteca_spring.model.Usuario;
 import biblioteca_spring.service.EmprestimoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/registros")
 public class EmprestimoController {
-    EmprestimoService emprestimoService;
+    private final EmprestimoService emprestimoService;
 
     @Autowired
     public EmprestimoController(EmprestimoService emprestimoService){
@@ -38,7 +35,7 @@ public class EmprestimoController {
     }
 
     @GetMapping("{idUsuario}")
-    public List<Livro> livrosAtivosPorUsuario(Long idUsuario){
+    public List<Livro> livrosAtivosPorUsuario(@PathVariable Long idUsuario){
         return emprestimoService.listarLivrosAtivosPorUsuario(idUsuario);
     }
 

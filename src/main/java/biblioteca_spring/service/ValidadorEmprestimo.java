@@ -14,7 +14,7 @@ public class ValidadorEmprestimo {
         this.registrosRepository = registrosRepository;
     }
 
-    public boolean podeEmprestar(Usuario usuario, Livro livro){
+    public void podeEmprestar(Usuario usuario, Livro livro){
         boolean jaPossuiEsseExemplar = registrosRepository.existsByUsuarioAndLivroAndFinalizadoFalse(usuario, livro);
 
         if (jaPossuiEsseExemplar){
@@ -32,7 +32,5 @@ public class ValidadorEmprestimo {
         if (registrosRepository.countByUsuarioAndFinalizadoFalse(usuario) >= usuario.getLimiteLivros()){
             throw new RuntimeException("[AVISO] - Limite de livros em posse atingido");
         }
-
-        return true;
     }
 }

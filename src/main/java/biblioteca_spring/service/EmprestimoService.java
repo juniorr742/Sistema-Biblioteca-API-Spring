@@ -1,14 +1,9 @@
 package biblioteca_spring.service;
 
 import biblioteca_spring.dto.EmprestimoRequestDTO;
-import biblioteca_spring.dto.LivroRequestDTO;
-import biblioteca_spring.dto.UsuarioRequestDTO;
 import biblioteca_spring.model.*;
-import biblioteca_spring.repository.LivroRepository;
 import biblioteca_spring.repository.RegistrosRepository;
 
-
-import biblioteca_spring.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,32 +11,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class EmprestimoService {
 
-    private ValidadorEmprestimo validador;
-    private CalculadoraMulta calculadora;
-    private PagamentoService pagamento;
-    private RegistrosRepository registrosRepository;
-    private LivroRepository livroRepository;
-    private UsuarioService usuarioService;
-    private LivroService livroService;
-    private UsuarioRepository usuarioRepository;
+    private final ValidadorEmprestimo validador;
+    private final CalculadoraMulta calculadora;
+    private final PagamentoService pagamento;
+    private final RegistrosRepository registrosRepository;
+    private final UsuarioService usuarioService;
+    private final LivroService livroService;
 
     @Autowired
-    public EmprestimoService(ValidadorEmprestimo validador, CalculadoraMulta calculadora, PagamentoService pagamento, RegistrosRepository registrosRepository, LivroRepository livroRepository,
-    UsuarioService usuarioService, LivroService livroService, UsuarioRepository usuarioRepository) {
+    public EmprestimoService(ValidadorEmprestimo validador, CalculadoraMulta calculadora, PagamentoService pagamento, RegistrosRepository registrosRepository,
+    UsuarioService usuarioService, LivroService livroService) {
         this.validador = validador;
         this.calculadora = calculadora;
         this.pagamento = pagamento;
         this.registrosRepository = registrosRepository;
-        this.livroRepository = livroRepository;
         this.usuarioService = usuarioService;
         this.livroService = livroService;
-        this.usuarioRepository = usuarioRepository;
     }
 
     @Transactional
@@ -49,15 +39,11 @@ public class EmprestimoService {
         Usuario usuario = usuarioService.buscarPorId(emprestimoDTO.getIdUsuario());
         Livro livro = livroService.buscarPorId(emprestimoDTO.getIdLivro());
 
-        if (!validador.podeEmprestar(usuario, livro)){
-            throw new RuntimeException("[AVISO] - Erro de validação");
-        }
+        validador.podeEmprestar(usuario, livro);
 
         RegistroEmprestimo registroEmprestimo = new RegistroEmprestimo(usuario, livro);
         pagamento.aplicarTaxaEmprestimo(usuario);
         livro.setDisponivel(false);
-        usuarioRepository.save(usuario);
-        livroRepository.save(livro);
         registrosRepository.save(registroEmprestimo);
         return registroEmprestimo;
     }
@@ -76,9 +62,7 @@ public class EmprestimoService {
 
         registro.getLivro().setDisponivel(true);
         registro.finalizarEmprestimo();
-        usuarioRepository.save(registro.getUsuario());
-        livroRepository.save(registro.getLivro());
-        return registrosRepository.save(registro);
+        return registro;
     }
 
     public List<RegistroEmprestimo> listarHistorico(){

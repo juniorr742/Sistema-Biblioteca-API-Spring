@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 public class UsuarioService {
-    UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository){
@@ -27,9 +27,10 @@ public class UsuarioService {
 
             case "professor": Usuario usuario1 = new Professor(usuarioDTO.getNome());
                 return usuarioRepository.save(usuario1);
-        }
 
-        throw new RuntimeException("[AVISO] - Erro de indentificação do usuário");
+            default:
+                throw new RuntimeException("[AVISO] - Erro de indentificação do usuário");
+        }
     }
 
     public Usuario buscarPorId(long id){
@@ -57,14 +58,4 @@ public class UsuarioService {
     public List<Usuario> buscarUsuarioPorNome(String nome){
         return usuarioRepository.findByNomeContainingIgnoreCase(nome);
     }
-
-    public Usuario verificarSaldo(long id) {
-        Usuario usuario = usuarioRepository.findById(id).orElse(null);
-        if (usuario != null) {
-            return usuario;
-        }
-        throw new RuntimeException("[AVISO] - Usuário não identificado");
-    }
-
-
 }

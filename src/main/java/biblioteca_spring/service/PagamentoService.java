@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PagamentoService {
-    UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public PagamentoService(UsuarioRepository usuarioRepository){
         this.usuarioRepository = usuarioRepository;
@@ -24,10 +24,18 @@ public class PagamentoService {
         throw new RuntimeException("[AVISO] - O usuário não tem pendências");
     }
 
+    public Usuario processarPagamentoParcial(Usuario usuario, double valorPago){
+
+        if (valorPago > 0 && usuario.getSaldo().getSaldoDevedor() >= valorPago){
+            usuario.getSaldo().reduzirValor(valorPago);
+            return usuarioRepository.save(usuario);
+        }
+        throw new RuntimeException("[AVISO] - Insira um valor pago válido.");
+    }
+
     public Usuario aplicarMultaAtraso(Usuario usuario, double valorMulta) {
         if (valorMulta > 0) {
             usuario.getSaldo().aumentarDebito(valorMulta);
-            usuarioRepository.save(usuario);
             return usuario;
         }
         throw new RuntimeException("[AVISO] - O valor da multa não pode ser negativo");
@@ -36,15 +44,10 @@ public class PagamentoService {
     public Usuario aplicarTaxaEmprestimo(Usuario usuario) {
         double taxa = BibliotecaConfig.CUSTO_FIXO_EMPRESTIMO;
         usuario.getSaldo().aumentarDebito(taxa);
-        usuarioRepository.save(usuario);
         return usuario;
     }
 
     public Usuario verificarSaldo(long id) {
-        Usuario usuario = usuarioRepository.findById(id).orElse(null);
-        if (usuario != null) {
-            return usuario;
-        }
-        throw new RuntimeException("[AVISO] - Usuário não identificado");
+        return usuarioRepository.findById(id).orElseThrow((() -> new RuntimeException("[AVISO] - Usuário não encontrado")));
     }
 }

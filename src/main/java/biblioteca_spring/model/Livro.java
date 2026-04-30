@@ -44,8 +44,12 @@ public class Livro {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
     }
 
     @Override
@@ -57,10 +61,10 @@ public class Livro {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Livro livro = (Livro) o;
-        return Objects.equals(titulo, livro.titulo);
+        return Objects.equals(titulo, livro.titulo) && Objects.equals(autor, livro.autor);
     }
     @Override
     public int hashCode() {
-        return Objects.hashCode(titulo);
-    }
+        return Objects.hash(titulo, autor);
+    } // evita duplicattas.
 }

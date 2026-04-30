@@ -26,10 +26,10 @@ public class Pagamento {
     public void aumentarDebito(double valor){
         if (valor > 0){
             this.saldoDevedor += valor;
+            atualizarData();
         }else {
-            System.out.println("ERRO: valor negativo!");
+            throw new RuntimeException("ERRO: valor negativo!");
         }
-        atualizarData();
     }
 
     public void reduzirValor(double valor){
@@ -37,14 +37,10 @@ public class Pagamento {
             this.saldoDevedor -= valor;
             atualizarData();
         }else if (valor > this.saldoDevedor){
-            System.out.println("ERRO: Pagamento maior que o saldo devedor.");
+            throw new RuntimeException("ERRO: Pagamento maior que o saldo devedor.");
         }else {
-            System.out.println("ERRO: Valor negativo.");
+            throw new RuntimeException("ERRO: Valor negativo.");
         }
-    }
-
-    public void setSaldoDevedor(double valor){
-        this.saldoDevedor = valor;
     }
 
     public void quitarTotalmente(){

@@ -17,13 +17,14 @@ public class LivroService {
 
     public Livro salvar(LivroRequestDTO livroDTO){
 
-        if (livroRepository.existsByTituloContainingIgnoreCase(livroDTO.getTitulo())){
+        if (livroRepository.existsByTituloIgnoreCase(livroDTO.getTitulo())){
             throw new RuntimeException("[AVISO] - Livro com titulos idênticos.");
         }
 
         Livro livro = new Livro(livroDTO.getTitulo(), livroDTO.getAutor());
         return livroRepository.save(livro);
     }
+
     public Livro buscarPorId(Long id){
         return livroRepository.findById(id).orElseThrow(() -> new RuntimeException("Livro não encontrado"));
     }
@@ -33,12 +34,9 @@ public class LivroService {
     }
 
     public Livro atualizar(Long id, LivroRequestDTO livroDTO){
-        if (!livroRepository.existsById(id)){
-            throw new RuntimeException("Livro não existente");
-         }
-
-        Livro livro = new Livro(livroDTO.getTitulo(), livroDTO.getAutor());
-        livro.setId(id);
+        Livro livro = buscarPorId(id);
+        livro.setTitulo(livroDTO.getTitulo());
+        livro.setAutor(livroDTO.getAutor());
 
         return livroRepository.save(livro);
     }

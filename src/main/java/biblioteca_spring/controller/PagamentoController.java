@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("usuarios/pagamento")
+@RequestMapping("/usuarios/pagamento")
 public class PagamentoController {
     private final PagamentoService pagamentoService;
     private final UsuarioService usuarioService;
@@ -29,11 +29,16 @@ public class PagamentoController {
         return BibliotecaConfig.CUSTO_FIXO_EMPRESTIMO;
     }
 
-    @PostMapping("/{id}")
-    public Usuario processarPagamento(@PathVariable Long id){
+    @PutMapping("/{id}")
+    public Usuario processarPagamentoTotal(@PathVariable Long id){
         Usuario usuario = usuarioService.buscarPorId(id);
         return pagamentoService.processarPagamentoTotal(usuario);
     }
 
+    @PutMapping("/{id}/{valorPago}")
+    public Usuario processarPagamentoParcial(@PathVariable Long id, @PathVariable double valorPago){
+        Usuario usuario = usuarioService.buscarPorId(id);
+        return pagamentoService.processarPagamentoParcial(usuario, valorPago);
+    }
 
 }
