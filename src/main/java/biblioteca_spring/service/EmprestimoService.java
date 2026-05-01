@@ -1,6 +1,7 @@
 package biblioteca_spring.service;
 
 import biblioteca_spring.dto.EmprestimoRequestDTO;
+import biblioteca_spring.exception.NotFoundException;
 import biblioteca_spring.model.*;
 import biblioteca_spring.repository.RegistrosRepository;
 
@@ -74,6 +75,6 @@ public class EmprestimoService {
     }
 
     public RegistroEmprestimo buscarPorId(Long idTransacao){
-        return registrosRepository.findById(idTransacao).orElseThrow(() -> new RuntimeException("[AVISO] - Registro de empréstimo não encontrado"));
+        return registrosRepository.findById(idTransacao).orElseThrow(() -> new NotFoundException("[AVISO] - Registro de empréstimo não encontrado"));
     }
 }

@@ -1,6 +1,8 @@
 package biblioteca_spring.service;
 
 import biblioteca_spring.config.BibliotecaConfig;
+import biblioteca_spring.exception.BusinessException;
+import biblioteca_spring.exception.NotFoundException;
 import biblioteca_spring.model.Usuario;
 import biblioteca_spring.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ public class PagamentoService {
             usuarioRepository.save(usuario);
             return usuario;
         }
-        throw new RuntimeException("[AVISO] - O usuário não tem pendências");
+        throw new BusinessException("[AVISO] - O usuário não tem pendências");
     }
 
     public Usuario processarPagamentoParcial(Usuario usuario, double valorPago){
@@ -30,7 +32,7 @@ public class PagamentoService {
             usuario.getSaldo().reduzirValor(valorPago);
             return usuarioRepository.save(usuario);
         }
-        throw new RuntimeException("[AVISO] - Insira um valor pago válido.");
+        throw new BusinessException("[AVISO] - Insira um valor pago válido.");
     }
 
     public Usuario aplicarMultaAtraso(Usuario usuario, double valorMulta) {
@@ -38,7 +40,7 @@ public class PagamentoService {
             usuario.getSaldo().aumentarDebito(valorMulta);
             return usuario;
         }
-        throw new RuntimeException("[AVISO] - O valor da multa não pode ser negativo");
+        throw new BusinessException("[AVISO] - O valor da multa não pode ser negativo");
     }
 
     public Usuario aplicarTaxaEmprestimo(Usuario usuario) {
@@ -48,6 +50,6 @@ public class PagamentoService {
     }
 
     public Usuario verificarSaldo(long id) {
-        return usuarioRepository.findById(id).orElseThrow((() -> new RuntimeException("[AVISO] - Usuário não encontrado")));
+        return usuarioRepository.findById(id).orElseThrow((() -> new NotFoundException("[AVISO] - Usuário não encontrado")));
     }
 }

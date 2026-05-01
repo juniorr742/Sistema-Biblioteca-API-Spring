@@ -1,5 +1,6 @@
 package biblioteca_spring.service;
 
+import biblioteca_spring.exception.BusinessException;
 import biblioteca_spring.model.Livro;
 import biblioteca_spring.model.Usuario;
 import biblioteca_spring.repository.RegistrosRepository;
@@ -18,19 +19,19 @@ public class ValidadorEmprestimo {
         boolean jaPossuiEsseExemplar = registrosRepository.existsByUsuarioAndLivroAndFinalizadoFalse(usuario, livro);
 
         if (jaPossuiEsseExemplar){
-            throw new RuntimeException("[AVISO] - O Usuário ja está com esse livro. ");
+            throw new BusinessException("[AVISO] - O Usuário ja está com esse livro. ");
         }
 
         if (!livro.isDisponivel()){
-            throw new RuntimeException("[AVISO] - O livro não esta disponível");
+            throw new BusinessException("[AVISO] - O livro não esta disponível");
         }
 
         if (usuario.getSaldo().getSaldoDevedor() >= usuario.getLimiteSaldo()) {
-            throw new RuntimeException("[AVISO] - Limite de saldo devedor atingido");
+            throw new BusinessException("[AVISO] - Limite de saldo devedor atingido");
         }
 
         if (registrosRepository.countByUsuarioAndFinalizadoFalse(usuario) >= usuario.getLimiteLivros()){
-            throw new RuntimeException("[AVISO] - Limite de livros em posse atingido");
+            throw new BusinessException("[AVISO] - Limite de livros em posse atingido");
         }
     }
 }
