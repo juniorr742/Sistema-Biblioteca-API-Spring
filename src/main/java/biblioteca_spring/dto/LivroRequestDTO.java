@@ -3,8 +3,12 @@ package biblioteca_spring.dto;
 public class LivroRequestDTO {
     private String titulo;
     private String autor;
-    private boolean disponivel;
+    private boolean disponivel = true;
 
+    public LivroRequestDTO(String titulo, String autor){
+        this.titulo = titulo;
+        this.autor = autor;
+    }
 
     public String getTitulo() {
         return titulo;
