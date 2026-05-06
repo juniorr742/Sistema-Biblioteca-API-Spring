@@ -1,14 +1,11 @@
 package biblioteca_spring.service;
 
-import biblioteca_spring.dto.LivroRequestDTO;
 import biblioteca_spring.dto.UsuarioRequestDTO;
 import biblioteca_spring.exception.BusinessException;
 import biblioteca_spring.exception.NotFoundException;
 import biblioteca_spring.model.Aluno;
-import biblioteca_spring.model.Livro;
 import biblioteca_spring.model.Professor;
 import biblioteca_spring.model.Usuario;
-import biblioteca_spring.repository.LivroRepository;
 import biblioteca_spring.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
