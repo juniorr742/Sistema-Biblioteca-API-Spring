@@ -4,6 +4,11 @@ public class EmprestimoRequestDTO {
     private Long idUsuario;
     private Long idLivro;
 
+    public EmprestimoRequestDTO(Long idUsuario, Long idLivro){
+        this.idUsuario = idUsuario;
+        this.idLivro = idLivro;
+    }
+
     public Long getIdLivro() {
         return idLivro;
     }
