@@ -1,6 +1,6 @@
 package biblioteca_spring.controller;
 
-import biblioteca_spring.dto.UsuarioRequestDTO;
+import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioCadastroDTO;
 import biblioteca_spring.model.Usuario;
 import biblioteca_spring.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public Usuario salvar (@RequestBody UsuarioRequestDTO usuarioDTO){
+    public Usuario salvar (@RequestBody UsuarioCadastroDTO usuarioDTO){
         return usuarioService.salvar(usuarioDTO);
     }
 
@@ -34,7 +34,7 @@ public class UsuarioController {
     }
 
     @PutMapping("{id}")
-    public Usuario atualizar(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuarioDTO){
+    public Usuario atualizar(@PathVariable Long id, @RequestBody UsuarioCadastroDTO usuarioDTO){
         return usuarioService.atualizar(id, usuarioDTO);
     }
 

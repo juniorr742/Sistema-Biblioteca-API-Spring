@@ -1,6 +1,6 @@
 package biblioteca_spring.service;
 
-import biblioteca_spring.dto.UsuarioRequestDTO;
+import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioCadastroDTO;
 import biblioteca_spring.exception.BusinessException;
 import biblioteca_spring.exception.NotFoundException;
 import biblioteca_spring.model.Aluno;
@@ -31,7 +31,7 @@ public class UsuarioServiceTeste {
 
     @Test
     void deveSalvarAlunoComSucesso(){
-        UsuarioRequestDTO dto = new UsuarioRequestDTO("Francisco", "aluno", "francisco@email.com");
+        UsuarioCadastroDTO dto = new UsuarioCadastroDTO("Francisco", "aluno", "francisco@email.com", "ggg");
         Usuario usuario = new Aluno(dto.getNome(), dto.getEmail());
 
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
@@ -44,7 +44,7 @@ public class UsuarioServiceTeste {
 
     @Test
     void deveSalvarProfessorComSucesso(){
-        UsuarioRequestDTO dto = new UsuarioRequestDTO("Caio", "Professor", "caio@email.com");
+        UsuarioCadastroDTO dto = new UsuarioCadastroDTO("Caio", "Professor", "caio@email.com", "ggg");
         Usuario usuario = new Professor(dto.getNome(), dto.getEmail());
 
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
@@ -57,7 +57,7 @@ public class UsuarioServiceTeste {
 
     @Test
     void deveDarDefault(){
-        UsuarioRequestDTO dto = new UsuarioRequestDTO("Lucas", "Inválido", "lucas@email.com");
+        UsuarioCadastroDTO dto = new UsuarioCadastroDTO("Lucas", "Inválido", "lucas@email.com", "ggg");
 
         assertThrows(BusinessException.class, () -> usuarioService.salvar(dto));
     }
@@ -87,7 +87,7 @@ public class UsuarioServiceTeste {
     @Test
     void deveAtualizar(){
         long id = 56L;
-        UsuarioRequestDTO dto = new UsuarioRequestDTO("Junior", "Aluno", "junior@email.com");
+        UsuarioCadastroDTO dto = new UsuarioCadastroDTO("Junior", "Aluno", "junior@email.com", "ggg");
         Usuario usuario = new Aluno(dto.getNome(), dto.getEmail());
 
         when(usuarioRepository.findById(id)).thenReturn(Optional.of(usuario));
@@ -102,7 +102,7 @@ public class UsuarioServiceTeste {
     @Test
     void deveDarErroAoAtualizar(){
         long id = 56L;
-        UsuarioRequestDTO dto = new UsuarioRequestDTO("Junior", "Aluno", "junior@email.com");
+        UsuarioCadastroDTO dto = new UsuarioCadastroDTO("Junior", "Aluno", "junior@email.com", "ggg");
         Usuario usuario = new Aluno(dto.getNome(), dto.getEmail());
 
         when(usuarioRepository.findById(id)).thenReturn(Optional.empty());
@@ -114,7 +114,7 @@ public class UsuarioServiceTeste {
     void deveDeletar(){
         long id = 56L;
 
-        UsuarioRequestDTO dto = new UsuarioRequestDTO("Junior", "Aluno", "junior@email.com");
+        UsuarioCadastroDTO dto = new UsuarioCadastroDTO("Junior", "Aluno", "junior@email.com", "ggg");
         Usuario usuario = new Aluno(dto.getNome(), dto.getEmail());
 
         when(usuarioRepository.existsById(id)).thenReturn(true);

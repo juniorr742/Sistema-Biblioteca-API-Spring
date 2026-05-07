@@ -1,7 +1,15 @@
 package biblioteca_spring.config;
 
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 public final class BibliotecaConfig {
+
+    @Bean
+    BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
     private BibliotecaConfig(){}
 

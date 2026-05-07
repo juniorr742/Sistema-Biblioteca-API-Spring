@@ -1,6 +1,6 @@
 package biblioteca_spring.service;
 
-import biblioteca_spring.dto.UsuarioRequestDTO;
+import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioCadastroDTO;
 import biblioteca_spring.exception.BusinessException;
 import biblioteca_spring.exception.NotFoundException;
 import biblioteca_spring.model.Aluno;
@@ -21,7 +21,7 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Usuario salvar(UsuarioRequestDTO usuarioDTO){
+    public Usuario salvar(UsuarioCadastroDTO usuarioDTO){
 
         if (usuarioRepository.existsByEmailIgnoreCase(usuarioDTO.getEmail())){
             throw new BusinessException("[AVISO] - Email ja existente");
@@ -47,10 +47,15 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Usuario atualizar(Long id, UsuarioRequestDTO usuarioDTO){
+    public Usuario atualizar(Long id, UsuarioCadastroDTO usuarioDTO){
        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new NotFoundException("[AVISO] - Usuário não encontrado"));
 
+       if (usuarioRepository.existsByEmailIgnoreCaseAndIdNot(usuarioDTO.getEmail(), id)){
+           throw new BusinessException("[AVISO] - Email já cadastrado em outra conta");
+       }
+
        usuario.setNome(usuarioDTO.getNome());
+       usuario.setEmail(usuarioDTO.getEmail());
         return usuarioRepository.save(usuario);
     }
 
