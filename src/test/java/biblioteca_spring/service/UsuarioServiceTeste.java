@@ -31,8 +31,8 @@ public class UsuarioServiceTeste {
 
     @Test
     void deveSalvarAlunoComSucesso(){
-        UsuarioRequestDTO dto = new UsuarioRequestDTO("Francisco", "aluno");
-        Usuario usuario = new Aluno(dto.getNome());
+        UsuarioRequestDTO dto = new UsuarioRequestDTO("Francisco", "aluno", "francisco@email.com");
+        Usuario usuario = new Aluno(dto.getNome(), dto.getEmail());
 
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
 
@@ -44,8 +44,8 @@ public class UsuarioServiceTeste {
 
     @Test
     void deveSalvarProfessorComSucesso(){
-        UsuarioRequestDTO dto = new UsuarioRequestDTO("Caio", "Professor");
-        Usuario usuario = new Professor(dto.getNome());
+        UsuarioRequestDTO dto = new UsuarioRequestDTO("Caio", "Professor", "caio@email.com");
+        Usuario usuario = new Professor(dto.getNome(), dto.getEmail());
 
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
 
@@ -57,7 +57,7 @@ public class UsuarioServiceTeste {
 
     @Test
     void deveDarDefault(){
-        UsuarioRequestDTO dto = new UsuarioRequestDTO("Lucas", "Inválido");
+        UsuarioRequestDTO dto = new UsuarioRequestDTO("Lucas", "Inválido", "lucas@email.com");
 
         assertThrows(BusinessException.class, () -> usuarioService.salvar(dto));
     }
@@ -65,7 +65,7 @@ public class UsuarioServiceTeste {
     @Test
     void buscarPorIdComSucesso(){
         long id = 56L;
-        Usuario usuario = new Aluno("Caio");
+        Usuario usuario = new Aluno("Caio", "caio@email.com");
 
         when(usuarioRepository.findById(id)).thenReturn(Optional.of(usuario));
 
@@ -87,8 +87,8 @@ public class UsuarioServiceTeste {
     @Test
     void deveAtualizar(){
         long id = 56L;
-        UsuarioRequestDTO dto = new UsuarioRequestDTO("Junior", "Aluno");
-        Usuario usuario = new Aluno(dto.getNome());
+        UsuarioRequestDTO dto = new UsuarioRequestDTO("Junior", "Aluno", "junior@email.com");
+        Usuario usuario = new Aluno(dto.getNome(), dto.getEmail());
 
         when(usuarioRepository.findById(id)).thenReturn(Optional.of(usuario));
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
@@ -102,8 +102,8 @@ public class UsuarioServiceTeste {
     @Test
     void deveDarErroAoAtualizar(){
         long id = 56L;
-        UsuarioRequestDTO dto = new UsuarioRequestDTO("Junior", "Aluno");
-        Usuario usuario = new Aluno(dto.getNome());
+        UsuarioRequestDTO dto = new UsuarioRequestDTO("Junior", "Aluno", "junior@email.com");
+        Usuario usuario = new Aluno(dto.getNome(), dto.getEmail());
 
         when(usuarioRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -114,8 +114,8 @@ public class UsuarioServiceTeste {
     void deveDeletar(){
         long id = 56L;
 
-        UsuarioRequestDTO dto = new UsuarioRequestDTO("Junior", "Aluno");
-        Usuario usuario = new Aluno(dto.getNome());
+        UsuarioRequestDTO dto = new UsuarioRequestDTO("Junior", "Aluno", "junior@email.com");
+        Usuario usuario = new Aluno(dto.getNome(), dto.getEmail());
 
         when(usuarioRepository.existsById(id)).thenReturn(true);
 

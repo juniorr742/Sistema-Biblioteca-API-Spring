@@ -44,7 +44,7 @@ public class RegistroEmprestimoTest {
         Long idUsuario = 56L;
         Long idLivro = 56L;
         EmprestimoRequestDTO dto = new EmprestimoRequestDTO(idUsuario, idLivro);
-        Usuario usuario = new Aluno("Caio");
+        Usuario usuario = new Aluno("Caio", "caio@email.com");
         Livro livro = new Livro("Harry Potter", "Chico");
         RegistroEmprestimo registroEmprestimo = new RegistroEmprestimo(usuario, livro);
 
@@ -87,7 +87,7 @@ public class RegistroEmprestimoTest {
         Long idUsuario = 56L;
         Long idLivro = 56L;
         EmprestimoRequestDTO dto = new EmprestimoRequestDTO(idUsuario, idLivro);
-        Usuario usuario = new Aluno("Caio");
+        Usuario usuario = new Aluno("Caio", "caio@email.com");
         Livro livro = new Livro("Harry Potter", "Chico");
 
         when(usuarioService.buscarPorId(idUsuario)).thenReturn(usuario);
@@ -100,7 +100,7 @@ public class RegistroEmprestimoTest {
     @Test
     void devolucaoSemMulta(){
         Long idTransacao = 56L;
-        Usuario usuario = new Aluno("Caio");
+        Usuario usuario = new Aluno("Caio", "caio@email.com");
         Livro livro = new Livro("Harry Potter", "Chico");
         RegistroEmprestimo registroEmprestimo = new RegistroEmprestimo(usuario, livro);
 
@@ -117,7 +117,7 @@ public class RegistroEmprestimoTest {
     @Test
     void devolucaoComMulta(){
         Long id =56L;
-        Usuario usuario = new Aluno("Caio");
+        Usuario usuario = new Aluno("Caio", "caio@email.com");
         Livro livro = new Livro("Harry Potter", "Chico");
         RegistroEmprestimo registroEmprestimo = new RegistroEmprestimo(usuario, livro);
 

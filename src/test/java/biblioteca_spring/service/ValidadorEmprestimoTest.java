@@ -27,7 +27,7 @@ public class ValidadorEmprestimoTest {
 
     @Test
     void validadoComSucesso(){
-        Usuario usuario = new Aluno("Caio");
+        Usuario usuario = new Aluno("Caio", "caio@email.com");
         Livro livro = new Livro("Harry Potter", "Chico");
 
         assertDoesNotThrow(() -> validadorEmprestimo.podeEmprestar(usuario, livro));
@@ -35,7 +35,7 @@ public class ValidadorEmprestimoTest {
 
     @Test
     void erroUsuarioComLivro(){
-        Usuario usuario = new Aluno("Caio");
+        Usuario usuario = new Aluno("Caio", "caio@email.com");
         Livro livro = new Livro("Harry Potter", "Chico");
 
         when(registrosRepository.existsByUsuarioAndLivroAndFinalizadoFalse(usuario, livro)).thenReturn(true);
@@ -45,7 +45,7 @@ public class ValidadorEmprestimoTest {
 
     @Test
     void erroLivroIndisponivel(){
-        Usuario usuario = new Aluno("Caio");
+        Usuario usuario = new Aluno("Caio", "caio@email.com");
         Livro livro = new Livro("Harry Potter", "Chico");
 
         when(registrosRepository.existsByUsuarioAndLivroAndFinalizadoFalse(usuario, livro)).thenReturn(false);
@@ -57,7 +57,7 @@ public class ValidadorEmprestimoTest {
 
     @Test
     void erroLimiteSaldo(){
-        Usuario usuario = new Aluno("Caio");
+        Usuario usuario = new Aluno("Caio", "caio@email.com");
         Livro livro = new Livro("Harry Potter", "Chico");
 
         when(registrosRepository.existsByUsuarioAndLivroAndFinalizadoFalse(usuario, livro)).thenReturn(false);
@@ -69,7 +69,7 @@ public class ValidadorEmprestimoTest {
 
     @Test
     void erroLimiteLivros(){
-        Usuario usuario = new Aluno("Caio");
+        Usuario usuario = new Aluno("Caio", "caio@email.com");
         Livro livro = new Livro("Harry Potter", "Chico");
 
         when(registrosRepository.existsByUsuarioAndLivroAndFinalizadoFalse(usuario, livro)).thenReturn(false);

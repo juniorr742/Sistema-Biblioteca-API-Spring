@@ -23,11 +23,15 @@ public class UsuarioService {
 
     public Usuario salvar(UsuarioRequestDTO usuarioDTO){
 
+        if (usuarioRepository.existsByEmailIgnoreCase(usuarioDTO.getEmail())){
+            throw new BusinessException("[AVISO] - Email ja existente");
+        }
+
         switch (usuarioDTO.getTipo().trim().toLowerCase()){
-            case "aluno": Usuario usuario = new Aluno(usuarioDTO.getNome());
+            case "aluno": Usuario usuario = new Aluno(usuarioDTO.getNome(), usuarioDTO.getEmail());
                 return usuarioRepository.save(usuario);
 
-            case "professor": Usuario usuario1 = new Professor(usuarioDTO.getNome());
+            case "professor": Usuario usuario1 = new Professor(usuarioDTO.getNome(), usuarioDTO.getEmail());
                 return usuarioRepository.save(usuario1);
 
             default:
