@@ -1,16 +1,16 @@
-package biblioteca_spring.dto;
+package biblioteca_spring.dto.UsuarioRequestDTO;
 
-import jakarta.persistence.Column;
-
-public class UsuarioRequestDTO {
+public class UsuarioCadastroDTO {
     private String nome;
     private String tipo;
     private String email;
+    private String senha;
 
-    public UsuarioRequestDTO(String nome, String tipo, String email){
+    public UsuarioCadastroDTO(String nome, String tipo, String email, String senha){
         this.nome = nome;
         this.tipo = tipo;
         this.email = email;
+        this.senha = senha;
     }
 
     public String getNome() {
@@ -35,5 +35,13 @@ public class UsuarioRequestDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }
