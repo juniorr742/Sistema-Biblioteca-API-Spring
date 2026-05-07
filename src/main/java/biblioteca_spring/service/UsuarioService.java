@@ -1,5 +1,6 @@
 package biblioteca_spring.service;
 
+import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioAtualizarDTO;
 import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioCadastroDTO;
 import biblioteca_spring.exception.BusinessException;
 import biblioteca_spring.exception.NotFoundException;
@@ -8,6 +9,7 @@ import biblioteca_spring.model.Professor;
 import biblioteca_spring.model.Usuario;
 import biblioteca_spring.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +17,12 @@ import java.util.List;
 @Service
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository){
+    public UsuarioService(UsuarioRepository usuarioRepository, BCryptPasswordEncoder passwordEncoder){
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Usuario salvar(UsuarioCadastroDTO usuarioDTO){
@@ -28,10 +32,14 @@ public class UsuarioService {
         }
 
         switch (usuarioDTO.getTipo().trim().toLowerCase()){
-            case "aluno": Usuario usuario = new Aluno(usuarioDTO.getNome(), usuarioDTO.getEmail());
+            case "aluno":
+                String senhaCriptografada = passwordEncoder.encode(usuarioDTO.getSenha());
+                Usuario usuario = new Aluno(usuarioDTO.getNome(), usuarioDTO.getEmail(),senhaCriptografada);
                 return usuarioRepository.save(usuario);
 
-            case "professor": Usuario usuario1 = new Professor(usuarioDTO.getNome(), usuarioDTO.getEmail());
+            case "professor":
+                String senhaCriptogradada1 = passwordEncoder.encode(usuarioDTO.getSenha());
+                Usuario usuario1 = new Professor(usuarioDTO.getNome(), usuarioDTO.getEmail(), senhaCriptogradada1);
                 return usuarioRepository.save(usuario1);
 
             default:
@@ -47,7 +55,7 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Usuario atualizar(Long id, UsuarioCadastroDTO usuarioDTO){
+    public Usuario atualizar(Long id, UsuarioAtualizarDTO usuarioDTO){
        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new NotFoundException("[AVISO] - Usuário não encontrado"));
 
        if (usuarioRepository.existsByEmailIgnoreCaseAndIdNot(usuarioDTO.getEmail(), id)){

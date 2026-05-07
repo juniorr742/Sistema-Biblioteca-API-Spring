@@ -1,5 +1,6 @@
 package biblioteca_spring.service;
 
+import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioAtualizarDTO;
 import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioCadastroDTO;
 import biblioteca_spring.exception.BusinessException;
 import biblioteca_spring.exception.NotFoundException;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
@@ -26,14 +28,18 @@ public class UsuarioServiceTeste {
     @Mock
     UsuarioRepository usuarioRepository;
 
+    @Mock
+    BCryptPasswordEncoder passwordEncoder;
+
     @InjectMocks
     UsuarioService usuarioService;
 
     @Test
     void deveSalvarAlunoComSucesso(){
         UsuarioCadastroDTO dto = new UsuarioCadastroDTO("Francisco", "aluno", "francisco@email.com", "ggg");
-        Usuario usuario = new Aluno(dto.getNome(), dto.getEmail());
+        Usuario usuario = new Aluno(dto.getNome(), dto.getEmail(), "ggg");
 
+        when(passwordEncoder.encode(any())).thenReturn("hashFake");
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
 
         Usuario resultado = usuarioService.salvar(dto);
@@ -45,8 +51,9 @@ public class UsuarioServiceTeste {
     @Test
     void deveSalvarProfessorComSucesso(){
         UsuarioCadastroDTO dto = new UsuarioCadastroDTO("Caio", "Professor", "caio@email.com", "ggg");
-        Usuario usuario = new Professor(dto.getNome(), dto.getEmail());
+        Usuario usuario = new Professor(dto.getNome(), dto.getEmail(), "ggg");
 
+        when(passwordEncoder.encode(any())).thenReturn("hashFake");
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
 
         Usuario resultado = usuarioService.salvar(dto);
@@ -65,7 +72,7 @@ public class UsuarioServiceTeste {
     @Test
     void buscarPorIdComSucesso(){
         long id = 56L;
-        Usuario usuario = new Aluno("Caio", "caio@email.com");
+        Usuario usuario = new Aluno("Caio", "caio@email.com", "ggg");
 
         when(usuarioRepository.findById(id)).thenReturn(Optional.of(usuario));
 
@@ -87,8 +94,8 @@ public class UsuarioServiceTeste {
     @Test
     void deveAtualizar(){
         long id = 56L;
-        UsuarioCadastroDTO dto = new UsuarioCadastroDTO("Junior", "Aluno", "junior@email.com", "ggg");
-        Usuario usuario = new Aluno(dto.getNome(), dto.getEmail());
+        UsuarioAtualizarDTO dto = new UsuarioAtualizarDTO("Junior",  "junior@email.com");
+        Usuario usuario = new Aluno(dto.getNome(), dto.getEmail(), "ggg");
 
         when(usuarioRepository.findById(id)).thenReturn(Optional.of(usuario));
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
@@ -102,8 +109,8 @@ public class UsuarioServiceTeste {
     @Test
     void deveDarErroAoAtualizar(){
         long id = 56L;
-        UsuarioCadastroDTO dto = new UsuarioCadastroDTO("Junior", "Aluno", "junior@email.com", "ggg");
-        Usuario usuario = new Aluno(dto.getNome(), dto.getEmail());
+        UsuarioAtualizarDTO dto = new UsuarioAtualizarDTO("Junior", "junior@email.com");
+        Usuario usuario = new Aluno(dto.getNome(), dto.getEmail(), "ggg");
 
         when(usuarioRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -115,7 +122,7 @@ public class UsuarioServiceTeste {
         long id = 56L;
 
         UsuarioCadastroDTO dto = new UsuarioCadastroDTO("Junior", "Aluno", "junior@email.com", "ggg");
-        Usuario usuario = new Aluno(dto.getNome(), dto.getEmail());
+        Usuario usuario = new Aluno(dto.getNome(), dto.getEmail(), dto.getSenha());
 
         when(usuarioRepository.existsById(id)).thenReturn(true);
 

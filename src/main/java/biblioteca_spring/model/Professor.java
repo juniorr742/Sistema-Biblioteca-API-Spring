@@ -7,8 +7,8 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("Professor")
 public class Professor extends Usuario{
     protected Professor (){}
-    public Professor(String nome, String email){
-        super(nome, email);
+    public Professor(String nome, String email, String senha){
+        super(nome, email, senha);
     }
 
     @Override

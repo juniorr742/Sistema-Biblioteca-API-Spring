@@ -1,5 +1,6 @@
 package biblioteca_spring.controller;
 
+import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioAtualizarDTO;
 import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioCadastroDTO;
 import biblioteca_spring.model.Usuario;
 import biblioteca_spring.service.UsuarioService;
@@ -34,7 +35,7 @@ public class UsuarioController {
     }
 
     @PutMapping("{id}")
-    public Usuario atualizar(@PathVariable Long id, @RequestBody UsuarioCadastroDTO usuarioDTO){
+    public Usuario atualizar(@PathVariable Long id, @RequestBody UsuarioAtualizarDTO usuarioDTO){
         return usuarioService.atualizar(id, usuarioDTO);
     }
 
