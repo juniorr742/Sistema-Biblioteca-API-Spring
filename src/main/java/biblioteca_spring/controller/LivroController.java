@@ -43,7 +43,7 @@ public class LivroController {
         livroService.deletar(id);
     }
 
-    @GetMapping("/buscar")
+    @GetMapping("/buscar/{titulo}")
     public List<Livro> buscarLivroPorTitulo(@RequestParam String titulo){
         return livroService.buscarLivroPorTitulo(titulo);
     }
