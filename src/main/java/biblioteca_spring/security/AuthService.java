@@ -2,6 +2,7 @@ package biblioteca_spring.security;
 
 
 import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioLoginDTO;
+import biblioteca_spring.exception.BusinessException;
 import biblioteca_spring.model.Usuario;
 import biblioteca_spring.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class AuthService {
     public String autenticar(UsuarioLoginDTO usuarioLoginDTO){
         Optional<Usuario> usuario = usuarioRepository.findByEmailIgnoreCase(usuarioLoginDTO.getEmail());
         return usuario.filter(value -> passwordEncoder.matches(usuarioLoginDTO.getSenha(), value.getSenha()))
-                .map(value -> jwtService.gerarToken(value)).orElse(null);
+                .map(value -> jwtService.gerarToken(value))
+                .orElseThrow(() -> new BusinessException("[AVISO] - Email ou senha inválidos"));
     }
 }
