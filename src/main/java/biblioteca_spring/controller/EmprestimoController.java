@@ -1,8 +1,9 @@
 package biblioteca_spring.controller;
 
-import biblioteca_spring.dto.EmprestimoRequestDTO;
+import biblioteca_spring.dto.EmprestimoRequestDTO.EmprestimoRequestDTO;
+import biblioteca_spring.dto.EmprestimoRequestDTO.EmprestimoResponseDTO;
 import biblioteca_spring.model.Livro;
-import biblioteca_spring.model.RegistroEmprestimo;
+import biblioteca_spring.model.Emprestimo;
 import biblioteca_spring.service.EmprestimoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,17 +21,19 @@ public class EmprestimoController {
     }
 
     @PostMapping
-    public RegistroEmprestimo emprestarLivro(@RequestBody EmprestimoRequestDTO emprestimoDTO){
-        return emprestimoService.emprestarLivro(emprestimoDTO);
+    public EmprestimoResponseDTO emprestarLivro(@RequestBody EmprestimoRequestDTO emprestimoDTO){
+        Emprestimo registro = emprestimoService.emprestarLivro(emprestimoDTO);
+        return new EmprestimoResponseDTO(registro.getUsuario().getNome(), registro.getLivro().getTitulo(), registro.getIdTransacao(), registro.isFinalizado());
     }
 
     @PutMapping("{idTransacao}")
-    public RegistroEmprestimo devolverLivro(@PathVariable Long idTransacao){
-       return emprestimoService.devolverLivro(idTransacao);
+    public EmprestimoResponseDTO devolverLivro(@PathVariable Long idTransacao){
+        Emprestimo registro = emprestimoService.devolverLivro(idTransacao);
+        return new EmprestimoResponseDTO(registro.getUsuario().getNome(), registro.getLivro().getTitulo(), registro.getIdTransacao(), registro.isFinalizado());
     }
 
     @GetMapping
-    public List<RegistroEmprestimo> listarTodos() {
+    public List<Emprestimo> listarTodos() {
         return emprestimoService.listarHistorico();
     }
 
