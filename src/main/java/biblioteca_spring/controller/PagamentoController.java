@@ -1,6 +1,7 @@
 package biblioteca_spring.controller;
 
 import biblioteca_spring.config.BibliotecaConfig;
+import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioResponseDTO;
 import biblioteca_spring.model.Usuario;
 import biblioteca_spring.service.PagamentoService;
 import biblioteca_spring.service.UsuarioService;
@@ -20,8 +21,9 @@ public class PagamentoController {
     }
 
     @GetMapping("/{id}")
-    public Usuario verificarSaldo(@PathVariable Long id) {
-        return pagamentoService.verificarSaldo(id);
+    public UsuarioResponseDTO verificarSaldo(@PathVariable Long id) {
+        Usuario usuario = pagamentoService.verificarSaldo(id);
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo());
     }
 
     @GetMapping
@@ -30,15 +32,17 @@ public class PagamentoController {
     }
 
     @PutMapping("/{id}")
-    public Usuario processarPagamentoTotal(@PathVariable Long id){
+    public UsuarioResponseDTO processarPagamentoTotal(@PathVariable Long id){
         Usuario usuario = usuarioService.buscarPorId(id);
-        return pagamentoService.processarPagamentoTotal(usuario);
+        pagamentoService.processarPagamentoTotal(usuario);
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo());
     }
 
     @PutMapping("/{id}/{valorPago}")
-    public Usuario processarPagamentoParcial(@PathVariable Long id, @PathVariable double valorPago){
+    public UsuarioResponseDTO processarPagamentoParcial(@PathVariable Long id, @PathVariable double valorPago){
         Usuario usuario = usuarioService.buscarPorId(id);
-        return pagamentoService.processarPagamentoParcial(usuario, valorPago);
+        pagamentoService.processarPagamentoParcial(usuario, valorPago);
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo());
     }
 
 }
