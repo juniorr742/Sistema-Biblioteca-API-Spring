@@ -10,20 +10,55 @@ A API está em produção e pode ser testada agora:
 
 **Base URL:** `https://sistema-biblioteca-api-spring-production.up.railway.app`
 
-### Credenciais de demonstração
+---
 
-```json
-{
-  "email": "junior@teste.com",
-  "senha": "teste@123"
-}
-```
+## Endpoints
 
-> O cadastro de usuários é restrito a administradores autenticados por design — a biblioteca controla quem tem acesso ao sistema.
+### Autenticação
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/auth/login` | Autentica e retorna token JWT |
+
+### Livros
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/livros` | Lista todos os livros |
+| GET | `/livros/{id}` | Busca livro por ID |
+| GET | `/livros/buscar/{titulo}` | Busca por título |
+| POST | `/livros` | Cadastra livro |
+| PUT | `/livros/{id}` | Atualiza livro |
+| DELETE | `/livros/{id}` | Remove livro |
+
+### Usuários
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/usuarios` | Lista todos os usuários |
+| GET | `/usuarios/{id}` | Busca usuário por ID |
+| GET | `/usuarios/buscarNome/{nome}` | Busca por nome |
+| POST | `/usuarios` | Cadastra usuário |
+| PUT | `/usuarios/{id}` | Atualiza usuário |
+| DELETE | `/usuarios/{id}` | Remove usuário |
+
+### Registros de Empréstimo
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/registros` | Histórico completo |
+| GET | `/registros/{idTransacao}/buscar` | Busca por ID da transação |
+| GET | `/registros/{idUsuario}` | Livros ativos do usuário |
+| POST | `/registros` | Realiza empréstimo |
+| PUT | `/registros/{idTransacao}` | Devolve livro |
+
+### Pagamentos
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/usuarios/pagamento/{id}` | Consulta saldo devedor |
+| GET | `/usuarios/pagamento` | Consulta custo fixo de empréstimo |
+| PUT | `/usuarios/pagamento/{id}` | Quita débito total |
+| PUT | `/usuarios/pagamento/{id}/{valorPago}` | Pagamento parcial |
 
 ---
 
-## Fluxo para testar a API
+## Como testar a API
 
 ### 1. Gerar token
 
@@ -60,7 +95,7 @@ Anote o `id` retornado.
 
 ### 3. Cadastrar um usuário
 
-O tipo pode ser `Aluno` (limite de 3 livros, saldo R$ 15) ou `Professor` (limite de 5 livros, saldo R$ 30).
+O tipo pode ser `Aluno` (limite de 3 livros, saldo R$ 15) ou `Professor` (limite de 5 livros, saldo R$ 30). O saldo é gerado automaticamente com base no tipo.
 
 ```http
 POST /usuarios
@@ -82,7 +117,7 @@ Anote o `id` retornado.
 ### 4. Realizar um empréstimo
 
 ```http
-POST /emprestimos
+POST /registros
 Authorization: Bearer SEU_TOKEN
 Content-Type: application/json
 
@@ -111,6 +146,10 @@ Authorization: Bearer SEU_TOKEN
 GET /registros
 Authorization: Bearer SEU_TOKEN
 ```
+
+---
+
+> O cadastro de usuários é restrito a administradores autenticados por design — a biblioteca controla quem tem acesso ao sistema.
 
 ---
 
@@ -201,15 +240,15 @@ cd Sistema-Biblioteca-API-Spring
 ### 2. Crie o banco de dados
 
 ```sql
-CREATE DATABASE biblioteca;
+CREATE DATABASE biblioteca_API;
 ```
 
 ### 3. Configure o `application.properties`
 
-Crie ou edite o arquivo em `src/main/resources/application.properties`:
+Crie o arquivo em `src/main/resources/application.properties`:
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/biblioteca
+spring.datasource.url=jdbc:mysql://localhost:3306/biblioteca_API
 spring.datasource.username=SEU_USUARIO
 spring.datasource.password=SUA_SENHA
 spring.jpa.hibernate.ddl-auto=update
@@ -230,58 +269,9 @@ A API sobe em `http://localhost:8080`.
 
 ---
 
-## Endpoints
-
-### Autenticação
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| POST | `/auth/login` | Autentica e retorna token JWT |
-
-### Livros
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/livros` | Lista todos os livros |
-| GET | `/livros/{id}` | Busca livro por ID |
-| GET | `/livros/busca?titulo=` | Busca por título |
-| POST | `/livros` | Cadastra livro |
-| PUT | `/livros/{id}` | Atualiza livro |
-| DELETE | `/livros/{id}` | Remove livro |
-
-### Usuários
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/usuarios` | Lista todos os usuários |
-| GET | `/usuarios/{id}` | Busca usuário por ID |
-| GET | `/usuarios/busca?nome=` | Busca por nome |
-| POST | `/usuarios` | Cadastra usuário |
-| PUT | `/usuarios/{id}` | Atualiza usuário |
-| DELETE | `/usuarios/{id}` | Remove usuário |
-
-### Registros de Empréstimo
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/registros` | Histórico completo |
-| GET | `/registros/{idTransacao}/buscar` | Busca por ID da transação |
-| GET | `/registros/{idUsuario}` | Livros ativos do usuário |
-| PUT | `/registros/{idTransacao}` | Devolve livro |
-
-### Empréstimos
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| POST | `/emprestimos` | Realiza empréstimo |
-
-### Pagamentos
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/pagamentos/saldo/{idUsuario}` | Consulta saldo devedor |
-| POST | `/pagamentos/total/{idUsuario}` | Quita débito total |
-| POST | `/pagamentos/parcial/{idUsuario}` | Pagamento parcial |
-
----
-
 ## Decisões de Design
 
-- **Cadastro de usuários restrito** — apenas administradores autenticados podem cadastrar usuários; a biblioteca controla o acesso ao sistema
+- **Cadastro de usuários restrito** — apenas administradores autenticados podem cadastrar usuários
 - **DTO como camada de segurança** — o cliente só envia o que o sistema permite; IDs não são expostos no body
 - **DTOs separados por contexto** — `Cadastro`, `Atualizar`, `Login` e `Response` expõem só o necessário para cada operação
 - **Histórico de empréstimos imutável** — sem delete e sem update exposto; auditoria por design
