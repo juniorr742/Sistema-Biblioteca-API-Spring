@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface RegistrosRepository extends JpaRepository<Emprestimo, Long> {
 
-    @Query("SELECT l FROM RegistroEmprestimo r JOIN r.livro l WHERE r.usuario.id = :idUsuario AND r.finalizado = false")
+    @Query("SELECT l FROM Emprestimo r JOIN r.livro l WHERE r.usuario.id = :idUsuario AND r.finalizado = false")
     List<Livro> findLivrosAtivosPorUsuario(@Param("idUsuario") long idUsuario);
 
     boolean existsByUsuarioAndLivroAndFinalizadoFalse(Usuario usuario, Livro livro);
