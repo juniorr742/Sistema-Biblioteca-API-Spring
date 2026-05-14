@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "registros")
-public class RegistroEmprestimo {
+public class Emprestimo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTransacao;
@@ -20,8 +20,8 @@ public class RegistroEmprestimo {
     private LocalDate dataDevolucao;
     private boolean finalizado;
 
-    protected RegistroEmprestimo(){}
-    public RegistroEmprestimo(Usuario usuario, Livro livro){
+    protected Emprestimo(){}
+    public Emprestimo(Usuario usuario, Livro livro){
         this.usuario = usuario;
         this.livro = livro;
         this.dataEmprestimo = LocalDate.now();
