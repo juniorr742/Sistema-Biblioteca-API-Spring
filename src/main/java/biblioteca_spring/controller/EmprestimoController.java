@@ -37,9 +37,9 @@ public class EmprestimoController {
         return emprestimoService.listarHistorico();
     }
 
-    @GetMapping("{idUsuario}/buscar")
-    public EmprestimoResponseDTO buscarPorId(@PathVariable Long id){
-        Emprestimo registro = emprestimoService.buscarPorId(id);
+    @GetMapping("{idTransacao}/buscar")
+    public EmprestimoResponseDTO buscarPorId(@PathVariable Long idTransacao){
+        Emprestimo registro = emprestimoService.buscarPorId(idTransacao);
         return new EmprestimoResponseDTO(registro.getUsuario().getNome(), registro.getLivro().getTitulo(), registro.getIdTransacao(), registro.isFinalizado());
     }
 
