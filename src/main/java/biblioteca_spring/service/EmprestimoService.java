@@ -1,6 +1,7 @@
 package biblioteca_spring.service;
 
 import biblioteca_spring.dto.EmprestimoRequestDTO.EmprestimoRequestDTO;
+import biblioteca_spring.dto.EmprestimoRequestDTO.EmprestimoResponseDTO;
 import biblioteca_spring.exception.NotFoundException;
 import biblioteca_spring.model.*;
 import biblioteca_spring.repository.RegistrosRepository;
@@ -66,8 +67,13 @@ public class EmprestimoService {
         return registro;
     }
 
-    public List<Emprestimo> listarHistorico(){
-        return registrosRepository.findAll();
+    public List<EmprestimoResponseDTO> listarHistorico(){
+        return registrosRepository.findAll().stream().map(e -> new EmprestimoResponseDTO(
+                e.getUsuario().getNome(),
+                e.getLivro().getTitulo(),
+                e.getIdTransacao(),
+                e.isFinalizado()
+        )).toList();
     }
 
     public List<Livro> listarLivrosAtivosPorUsuario(long idUsuario) {

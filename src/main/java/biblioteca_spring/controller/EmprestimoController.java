@@ -33,7 +33,7 @@ public class EmprestimoController {
     }
 
     @GetMapping
-    public List<Emprestimo> listarTodos() {
+    public List<EmprestimoResponseDTO> listarTodos() {
         return emprestimoService.listarHistorico();
     }
 
