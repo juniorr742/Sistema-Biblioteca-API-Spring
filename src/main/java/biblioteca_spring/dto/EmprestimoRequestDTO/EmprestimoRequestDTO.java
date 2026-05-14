@@ -1,4 +1,4 @@
-package biblioteca_spring.dto;
+package biblioteca_spring.dto.EmprestimoRequestDTO;
 
 public class EmprestimoRequestDTO {
     private Long idUsuario;
