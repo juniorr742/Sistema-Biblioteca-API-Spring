@@ -44,7 +44,7 @@ public class LivroController {
     }
 
     @GetMapping("/buscar/{titulo}")
-    public List<Livro> buscarLivroPorTitulo(@RequestParam String titulo){
+    public List<Livro> buscarLivroPorTitulo(@PathVariable String titulo){
         return livroService.buscarLivroPorTitulo(titulo);
     }
 
