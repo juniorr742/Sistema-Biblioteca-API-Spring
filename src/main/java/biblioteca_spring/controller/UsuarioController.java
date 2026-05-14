@@ -2,6 +2,7 @@ package biblioteca_spring.controller;
 
 import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioAtualizarDTO;
 import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioCadastroDTO;
+import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioResponseDTO;
 import biblioteca_spring.model.Usuario;
 import biblioteca_spring.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<Usuario> listarTodos(){
+    public List<UsuarioResponseDTO> listarTodos(){
         return usuarioService.listarTodos();
     }
 

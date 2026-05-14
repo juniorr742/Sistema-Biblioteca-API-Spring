@@ -2,6 +2,7 @@ package biblioteca_spring.service;
 
 import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioAtualizarDTO;
 import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioCadastroDTO;
+import biblioteca_spring.dto.UsuarioRequestDTO.UsuarioResponseDTO;
 import biblioteca_spring.exception.BusinessException;
 import biblioteca_spring.exception.NotFoundException;
 import biblioteca_spring.model.Aluno;
@@ -51,8 +52,16 @@ public class UsuarioService {
         return usuarioRepository.findById(id).orElseThrow(() -> new NotFoundException("[AVISO] - Usuário não encontrado"));
     }
 
-    public List<Usuario> listarTodos(){
-        return usuarioRepository.findAll();
+    public List<UsuarioResponseDTO> listarTodos(){
+        return usuarioRepository.findAll()
+                .stream().map(u -> new UsuarioResponseDTO(
+                        u.getId(),
+                        u.getNome(),
+                        u.getEmail(),
+                        u.obterTipo(),
+                        u.getLimiteLivros(),
+                        u.getLimiteSaldo()
+                )).toList();
     }
 
     public Usuario atualizar(Long id, UsuarioAtualizarDTO usuarioDTO){
