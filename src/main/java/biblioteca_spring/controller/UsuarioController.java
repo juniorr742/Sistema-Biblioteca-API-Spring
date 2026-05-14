@@ -31,8 +31,9 @@ public class UsuarioController {
     }
 
     @GetMapping("{id}")
-    public Usuario buscarPorId(@PathVariable Long id){
-        return usuarioService.buscarPorId(id);
+    public UsuarioResponseDTO buscarPorId(@PathVariable Long id){
+        Usuario usuario = usuarioService.buscarPorId(id);
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo());
     }
 
     @PutMapping("{id}")
