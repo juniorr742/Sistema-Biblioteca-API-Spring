@@ -1,6 +1,6 @@
 package biblioteca_spring.service;
 
-import biblioteca_spring.dto.EmprestimoRequestDTO;
+import biblioteca_spring.dto.EmprestimoRequestDTO.EmprestimoRequestDTO;
 import biblioteca_spring.exception.NotFoundException;
 import biblioteca_spring.model.*;
 import biblioteca_spring.repository.RegistrosRepository;
@@ -36,23 +36,23 @@ public class EmprestimoService {
     }
 
     @Transactional
-    public RegistroEmprestimo emprestarLivro(EmprestimoRequestDTO emprestimoDTO) {
+    public Emprestimo emprestarLivro(EmprestimoRequestDTO emprestimoDTO) {
         Usuario usuario = usuarioService.buscarPorId(emprestimoDTO.getIdUsuario());
         Livro livro = livroService.buscarPorId(emprestimoDTO.getIdLivro());
 
         validador.podeEmprestar(usuario, livro);
 
-        RegistroEmprestimo registroEmprestimo = new RegistroEmprestimo(usuario, livro);
+        Emprestimo emprestimo = new Emprestimo(usuario, livro);
         pagamento.aplicarTaxaEmprestimo(usuario);
         livro.setDisponivel(false);
-        registrosRepository.save(registroEmprestimo);
-        return registroEmprestimo;
+        registrosRepository.save(emprestimo);
+        return emprestimo;
     }
 
     @Transactional
-    public RegistroEmprestimo devolverLivro(Long idTransacao) {
+    public Emprestimo devolverLivro(Long idTransacao) {
 
-        RegistroEmprestimo registro = buscarPorId(idTransacao);
+        Emprestimo registro = buscarPorId(idTransacao);
 
         long diasCorridos = ChronoUnit.DAYS.between(registro.getDataEmprestimo(), LocalDate.now());
         double valorMulta = calculadora.valorCalculado(diasCorridos);
@@ -66,7 +66,7 @@ public class EmprestimoService {
         return registro;
     }
 
-    public List<RegistroEmprestimo> listarHistorico(){
+    public List<Emprestimo> listarHistorico(){
         return registrosRepository.findAll();
     }
 
@@ -74,7 +74,7 @@ public class EmprestimoService {
         return registrosRepository.findLivrosAtivosPorUsuario(idUsuario);
     }
 
-    public RegistroEmprestimo buscarPorId(Long idTransacao){
+    public Emprestimo buscarPorId(Long idTransacao){
         return registrosRepository.findById(idTransacao).orElseThrow(() -> new NotFoundException("[AVISO] - Registro de empréstimo não encontrado"));
     }
 }

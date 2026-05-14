@@ -1,11 +1,11 @@
 package biblioteca_spring.service;
 
-import biblioteca_spring.dto.EmprestimoRequestDTO;
+import biblioteca_spring.dto.EmprestimoRequestDTO.EmprestimoRequestDTO;
 import biblioteca_spring.exception.BusinessException;
 import biblioteca_spring.exception.NotFoundException;
 import biblioteca_spring.model.Aluno;
 import biblioteca_spring.model.Livro;
-import biblioteca_spring.model.RegistroEmprestimo;
+import biblioteca_spring.model.Emprestimo;
 import biblioteca_spring.model.Usuario;
 import biblioteca_spring.repository.RegistrosRepository;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class RegistroEmprestimoTest {
+public class EmprestimoTest {
 
     @Mock
     private ValidadorEmprestimo validador;
@@ -46,13 +46,13 @@ public class RegistroEmprestimoTest {
         EmprestimoRequestDTO dto = new EmprestimoRequestDTO(idUsuario, idLivro);
         Usuario usuario = new Aluno("Caio", "caio@email.com", "ggg");
         Livro livro = new Livro("Harry Potter", "Chico");
-        RegistroEmprestimo registroEmprestimo = new RegistroEmprestimo(usuario, livro);
+        Emprestimo emprestimo = new Emprestimo(usuario, livro);
 
         when(usuarioService.buscarPorId(idUsuario)).thenReturn(usuario);
         when(livroService.buscarPorId(idLivro)).thenReturn(livro);
-        when(registrosRepository.save(any(RegistroEmprestimo.class))).thenReturn(registroEmprestimo);
+        when(registrosRepository.save(any(Emprestimo.class))).thenReturn(emprestimo);
 
-       RegistroEmprestimo resultado = emprestimoService.emprestarLivro(dto);
+       Emprestimo resultado = emprestimoService.emprestarLivro(dto);
 
        verify(validador).podeEmprestar(usuario, livro);
        verify(pagamento).aplicarTaxaEmprestimo(usuario);
@@ -102,12 +102,12 @@ public class RegistroEmprestimoTest {
         Long idTransacao = 56L;
         Usuario usuario = new Aluno("Caio", "caio@email.com", "ggg");
         Livro livro = new Livro("Harry Potter", "Chico");
-        RegistroEmprestimo registroEmprestimo = new RegistroEmprestimo(usuario, livro);
+        Emprestimo emprestimo = new Emprestimo(usuario, livro);
 
-        when(registrosRepository.findById(idTransacao)).thenReturn(Optional.of(registroEmprestimo));
+        when(registrosRepository.findById(idTransacao)).thenReturn(Optional.of(emprestimo));
         when(calculadora.valorCalculado(anyLong())).thenReturn(0.0);
 
-        RegistroEmprestimo resultado = emprestimoService.devolverLivro(idTransacao);
+        Emprestimo resultado = emprestimoService.devolverLivro(idTransacao);
         verifyNoInteractions(pagamento);
 
         assertNotNull(resultado);
@@ -119,12 +119,12 @@ public class RegistroEmprestimoTest {
         Long id =56L;
         Usuario usuario = new Aluno("Caio", "caio@email.com", "ggg");
         Livro livro = new Livro("Harry Potter", "Chico");
-        RegistroEmprestimo registroEmprestimo = new RegistroEmprestimo(usuario, livro);
+        Emprestimo emprestimo = new Emprestimo(usuario, livro);
 
-        when(registrosRepository.findById(id)).thenReturn(Optional.of(registroEmprestimo));
+        when(registrosRepository.findById(id)).thenReturn(Optional.of(emprestimo));
         when(calculadora.valorCalculado(anyLong())).thenReturn(5.0);
 
-        RegistroEmprestimo resultado = emprestimoService.devolverLivro(id);
+        Emprestimo resultado = emprestimoService.devolverLivro(id);
         verify(pagamento).aplicarMultaAtraso(usuario, 5.0);
 
         assertNotNull(resultado);
