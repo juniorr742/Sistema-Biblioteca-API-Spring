@@ -37,8 +37,9 @@ public class UsuarioController {
     }
 
     @PutMapping("{id}")
-    public Usuario atualizar(@PathVariable Long id, @RequestBody UsuarioAtualizarDTO usuarioDTO){
-        return usuarioService.atualizar(id, usuarioDTO);
+    public UsuarioResponseDTO atualizar(@PathVariable Long id, @RequestBody UsuarioAtualizarDTO usuarioDTO){
+        Usuario usuario = usuarioService.atualizar(id, usuarioDTO);
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo());
     }
 
     @DeleteMapping("{id}")
