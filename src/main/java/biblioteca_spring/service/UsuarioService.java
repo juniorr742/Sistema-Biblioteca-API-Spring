@@ -83,7 +83,14 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    public List<Usuario> buscarUsuarioPorNome(String nome){
-        return usuarioRepository.findByNomeContainingIgnoreCase(nome);
+    public List<UsuarioResponseDTO> buscarUsuarioPorNome(String nome){
+        return usuarioRepository.findByNomeContainingIgnoreCase(nome).stream().map(u -> new UsuarioResponseDTO(
+                u.getId(),
+                u.getNome(),
+                u.getEmail(),
+                u.obterTipo(),
+                u.getLimiteLivros(),
+                u.getLimiteSaldo()
+        )).toList();
     }
 }

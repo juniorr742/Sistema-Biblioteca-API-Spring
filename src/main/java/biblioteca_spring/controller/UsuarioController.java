@@ -48,7 +48,7 @@ public class UsuarioController {
     }
 
     @GetMapping("buscarNome/{nome}")
-    public List<Usuario> buscarUsuarioPorNome(@PathVariable String nome){
+    public List<UsuarioResponseDTO> buscarUsuarioPorNome(@PathVariable String nome){
         return usuarioService.buscarUsuarioPorNome(nome);
     }
 }
