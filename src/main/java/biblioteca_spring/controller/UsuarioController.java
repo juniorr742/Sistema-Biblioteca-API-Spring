@@ -26,8 +26,9 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public Usuario salvar (@RequestBody UsuarioCadastroDTO usuarioDTO){
-        return usuarioService.salvar(usuarioDTO);
+    public UsuarioResponseDTO salvar (@RequestBody UsuarioCadastroDTO usuarioDTO){
+        Usuario usuario = usuarioService.salvar(usuarioDTO);
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo(), usuario.getSaldo().getSaldoDevedor());
     }
 
     @GetMapping("{id}")
