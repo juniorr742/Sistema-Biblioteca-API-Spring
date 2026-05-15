@@ -60,7 +60,7 @@ public class UsuarioService {
                         u.getEmail(),
                         u.obterTipo(),
                         u.getLimiteLivros(),
-                        u.getLimiteSaldo()
+                        u.getLimiteSaldo(), u.getSaldo().getSaldoDevedor()
                 )).toList();
     }
 
@@ -90,7 +90,7 @@ public class UsuarioService {
                 u.getEmail(),
                 u.obterTipo(),
                 u.getLimiteLivros(),
-                u.getLimiteSaldo()
+                u.getLimiteSaldo(), u.getSaldo().getSaldoDevedor()
         )).toList();
     }
 }

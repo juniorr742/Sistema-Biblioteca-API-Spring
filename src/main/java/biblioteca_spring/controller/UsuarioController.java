@@ -33,13 +33,13 @@ public class UsuarioController {
     @GetMapping("{id}")
     public UsuarioResponseDTO buscarPorId(@PathVariable Long id){
         Usuario usuario = usuarioService.buscarPorId(id);
-        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo());
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo(), usuario.getSaldo().getSaldoDevedor());
     }
 
     @PutMapping("{id}")
     public UsuarioResponseDTO atualizar(@PathVariable Long id, @RequestBody UsuarioAtualizarDTO usuarioDTO){
         Usuario usuario = usuarioService.atualizar(id, usuarioDTO);
-        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo());
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo(), usuario.getSaldo().getSaldoDevedor());
     }
 
     @DeleteMapping("{id}")

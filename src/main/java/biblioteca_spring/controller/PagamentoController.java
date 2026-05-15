@@ -23,7 +23,7 @@ public class PagamentoController {
     @GetMapping("/{id}")
     public UsuarioResponseDTO verificarSaldo(@PathVariable Long id) {
         Usuario usuario = pagamentoService.verificarSaldo(id);
-        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo());
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo(), usuario.getSaldo().getSaldoDevedor());
     }
 
     @GetMapping
@@ -35,14 +35,14 @@ public class PagamentoController {
     public UsuarioResponseDTO processarPagamentoTotal(@PathVariable Long id){
         Usuario usuario = usuarioService.buscarPorId(id);
         pagamentoService.processarPagamentoTotal(usuario);
-        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo());
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo(), usuario.getSaldo().getSaldoDevedor());
     }
 
     @PutMapping("/{id}/{valorPago}")
     public UsuarioResponseDTO processarPagamentoParcial(@PathVariable Long id, @PathVariable double valorPago){
         Usuario usuario = usuarioService.buscarPorId(id);
         pagamentoService.processarPagamentoParcial(usuario, valorPago);
-        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo());
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.obterTipo(), usuario.getLimiteLivros(), usuario.getLimiteSaldo(), usuario.getSaldo().getSaldoDevedor());
     }
 
 }
