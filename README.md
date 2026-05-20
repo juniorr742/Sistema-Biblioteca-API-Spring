@@ -10,6 +10,8 @@ A API está em produção e pode ser testada agora:
 
 **Base URL:** `https://sistema-biblioteca-api-spring-production.up.railway.app`
 
+📋 **Documentação Swagger:** disponível localmente em `http://localhost:8080/swagger-ui/index.html` após rodar o projeto. Deploy em produção pausado temporariamente.
+
 ---
 
 ## Endpoints
@@ -193,7 +195,7 @@ Substituição do armazenamento em memória por persistência real com MySQL.
 ### Etapa 3 — Spring Boot + Spring Security + JWT
 **Repositório:** [Sistema-Biblioteca-API-Spring](https://github.com/juniorr742/Sistema-Biblioteca-API-Spring)
 
-Migração para API REST com autenticação. Etapa atual.
+Migração para API REST com autenticação e documentação interativa via Swagger.
 
 **Stack:**
 - Java 21
@@ -204,6 +206,8 @@ Migração para API REST com autenticação. Etapa atual.
 - JWT (jjwt 0.12.6)
 - MySQL
 - JUnit 5 + Mockito
+- SpringDoc OpenAPI (Swagger UI)
+- Docker
 
 **O que foi implementado:**
 
@@ -218,7 +222,24 @@ Migração para API REST com autenticação. Etapa atual.
 - **31 testes unitários** — LivroServiceTest (8), UsuarioServiceTest (9), EmprestimoServiceTest (7), ValidadorEmprestimoTest (5), CalculadoraMultaTest (2)
 - **Autenticação JWT** — login, geração de token, validação por filtro em cada requisição
 - **BCrypt** — senhas nunca armazenadas em texto puro
-- `SecurityConfig` — `/auth/login` público, todos os demais endpoints protegidos com Bearer Token
+- **Swagger UI** — documentação interativa com suporte a Bearer Token via `SwaggerConfig`
+- `SecurityConfig` — `/auth/login` e rotas do Swagger públicas, todos os demais endpoints protegidos com Bearer Token
+
+---
+
+## Conceitos Aprendidos
+
+### Relacionamentos identificadores vs não-identificadores
+No banco de dados, um relacionamento **identificador** (linha contínua no Workbench) significa que a FK compõe a PK da tabela filha — o filho não tem identidade própria sem o pai. Um relacionamento **não-identificador** (linha tracejada) significa que a FK existe na tabela filha mas ela tem seu próprio `id` como PK. Na prática, quase todos os relacionamentos devem ser não-identificadores, exceto tabelas intermediárias N:N como `daily_production_employees`, que existem apenas para intermediar duas entidades e cuja PK é a composição das duas FKs.
+
+### Docker
+Docker resolve o problema de "funciona na minha máquina mas não no servidor". A aplicação e tudo que ela precisa para rodar é empacotado em uma **imagem** — um molde imutável definido no `Dockerfile`. Essa imagem é executada como um **container** — um processo isolado com seu próprio ambiente. O servidor só precisa ter Docker instalado, sem Java ou MySQL locais. O `docker-compose.yml` orquestra múltiplos containers (aplicação + banco), conectados em rede interna, com **volumes** para persistência dos dados além do ciclo de vida do container.
+
+### Swagger / OpenAPI
+O SpringDoc OpenAPI lê as anotações `@RestController`, `@GetMapping`, `@RequestBody` etc. e gera automaticamente uma interface visual interativa acessível em `/swagger-ui/index.html`. Permite explorar e testar endpoints sem Postman. Para funcionar com Spring Security, as rotas `/swagger-ui/**` e `/v3/api-docs/**` precisam ser liberadas no `SecurityConfig`. O suporte a Bearer Token é configurado via `SwaggerConfig` com `SecurityScheme` do tipo HTTP Bearer.
+
+### Compatibilidade de dependências
+`NoSuchMethodError` em runtime quase sempre indica incompatibilidade de versão entre bibliotecas. O método existia quando o código foi compilado mas não existe na versão carregada em execução. Solução: verificar a matriz de compatibilidade da dependência com a versão do framework principal.
 
 ---
 
@@ -266,6 +287,8 @@ jwt.secret=SUA_CHAVE_SECRETA_COM_PELO_MENOS_32_CARACTERES
 ```
 
 A API sobe em `http://localhost:8080`.
+
+Acesse a documentação Swagger em `http://localhost:8080/swagger-ui/index.html`.
 
 ---
 
