@@ -16,7 +16,7 @@ public class SwaggerConfig {
         return new OpenAPI().info(new Info()
                 .title("Biblioteca API").version("1.0").description("API rest para gerenciamento de uma biblioteca com JWT"))
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Authetication")).components(new Components()
-                        .addSecuritySchemes("Bearer Authentication", new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")));
+                        .addSecuritySchemes("Bearer Authentication", new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT").in(SecurityScheme.In.HEADER).name("Authorization")));
     }
 
 
