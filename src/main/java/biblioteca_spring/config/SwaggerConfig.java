@@ -21,7 +21,7 @@ public class SwaggerConfig {
                 .servers(List.of(
                         new Server().url("https://sistema-biblioteca-api-spring-production.up.railway.app").description("Servidor de Produção (Railway)"),
                         new Server().url("http://localhost:8080").description("Servidor Local")))
-                .addSecurityItem(new SecurityRequirement().addList("Bearer Authetication")).components(new Components()
+                .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication")).components(new Components()
                         .addSecuritySchemes("Bearer Authentication", new SecurityScheme().type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer").bearerFormat("JWT").in(SecurityScheme.In.HEADER).name("Authorization")));
     }
