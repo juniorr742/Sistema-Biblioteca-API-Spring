@@ -1,0 +1,39 @@
+services:
+  # Banco de Dados
+  db:
+    image: mysql:8.0
+    container_name: biblioteca-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: biblioteca_API
+    ports:
+      - "3306:3306"
+    networks:
+      - biblioteca-network
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # API Spring Boot
+  app:
+    build: .
+    container_name: biblioteca-api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/biblioteca_API
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_SQL_INIT_MODE=always
+    networks:
+      - biblioteca-network
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
+
+networks:
+  biblioteca-network:
